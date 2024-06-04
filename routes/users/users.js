@@ -1,102 +1,31 @@
 const express = require('express');
+const usersController = require('../../controllers/users/users');
 
 const userRoutes = express.Router();
 
 // register
 
-userRoutes.post('/register', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			user: 'User registered successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+userRoutes.post('/register', usersController.register);
 
 //POST/login
-userRoutes.post('/login', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			user: 'User login successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+userRoutes.post('/login', usersController.login);
 
 //GET/:id
-userRoutes.get('/:id', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			user: 'User deatils fetched successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+userRoutes.get('/:id', usersController.getUserById);
 
 //GET/profile/:id
-userRoutes.get('/profile/:id', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			user: 'User profile displayed successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+userRoutes.get('/profile/:id', usersController.getProfile);
 
 //PUT/profile-photo-upload/:id
-userRoutes.put('/profile-photo-upload/:id', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			user: 'User profile image uploaded successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+userRoutes.put('/profile-photo-upload/:id', usersController.updateProfileImage);
 
 //PUT/cover-image-upload/:id
-userRoutes.put('/cover-photo-upload/:id', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			user: 'User cover image uploaded successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+userRoutes.put('/cover-photo-upload/:id', usersController.updateCoverImage);
 
 //PUT/update-password/:id
-userRoutes.put('/update-password/:id', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			user: 'User password update successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+userRoutes.put('/update-password/:id', usersController.updatePassword);
 
 //GET/logout
-userRoutes.get('/logout', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			user: 'User logout successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+userRoutes.get('/logout/:id', usersController.getLogout);
 
 module.exports = userRoutes;

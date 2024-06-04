@@ -1,53 +1,18 @@
 const express = require('express');
+const commentsController = require('../../controllers/comments/comments');
 
 const commentsRoutes = express.Router();
 
 //POST
-commentsRoutes.post('/', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			comment: 'Comment created successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+commentsRoutes.post('/', commentsController.createComment);
 
 //GET/:id
-commentsRoutes.get('/:id', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			comment: 'Comment fetched successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+commentsRoutes.get('/:id', commentsController.getComment);
 
 //Delete/:id
-commentsRoutes.delete('/:id', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			comment: 'Comment deleted successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+commentsRoutes.delete('/:id', commentsController.deleteComment);
 
 // Put/:id
-commentsRoutes.put('/:id', async (req, res) => {
-	try {
-		res.json({
-			status: 'success',
-			comment: 'Comment updated successfully',
-		});
-	} catch (error) {
-		res.status(400).json({ message: error.message });
-	}
-});
+commentsRoutes.put('/:id', commentsController.updateComment);
 
 module.exports = commentsRoutes;
