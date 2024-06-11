@@ -9,6 +9,7 @@ const app = express();
 
 //middlewares
 //------
+app.use(express.json()); // pass incoming request to json
 // User route
 //------
 
