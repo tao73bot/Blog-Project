@@ -33,10 +33,20 @@ const usersController = {
 	},
 	// login
 	login: async (req, res) => {
+		const { email, password } = req.body;
 		try {
+			const userFound = await User.findOne({ email });
+			if (!userFound) {
+				throw new Error('Invalid login details');
+			}
+			// compare password
+			const validPassword = await bcrypt.compare(password, userFound.password);
+			if(!validPassword){
+				throw new Error('Invalid login details');
+			}
 			res.json({
 				status: 'success',
-				user: 'User login successfully',
+				data: userFound,
 			});
 		} catch (error) {
 			res.status(400).json({ message: error.message });
