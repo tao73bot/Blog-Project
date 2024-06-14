@@ -1,16 +1,21 @@
 const bcrypt = require('bcryptjs');
 const User = require('../../model/users/User');
+const appErr = require('../../utils/appErr');
 
 const usersController = {
 	// register
-	register: async (req, res) => {
-		const { fullname, email,username, password } = req.body;
+	register: async (req, res, next) => {
+		const { fullname, email, username, password } = req.body;
+		if (!fullname || !username || !email || !password) {
+			return next(appErr('All field are required!'));
+		}
 		try {
 			// check if user already exists
 			const userFound = await User.findOne({ email });
 			// throw error if user already exists
 			if (userFound) {
-				throw new Error('User already exists');
+				return next(appErr('User already exists'));
+				// throw new Error('User already exists');
 			}
 			// hash password
 			const salt = await bcrypt.genSalt(15);
@@ -32,17 +37,22 @@ const usersController = {
 		}
 	},
 	// login
-	login: async (req, res) => {
+	login: async (req, res, next) => {
 		const { email, password } = req.body;
+		if (!email || !password)
+			return next(appErr('Email and Password are required!'));
 		try {
 			const userFound = await User.findOne({ email });
 			if (!userFound) {
-				throw new Error('Invalid login details');
+				return next(appErr('Invalid login details'));
 			}
 			// compare password
-			const validPassword = await bcrypt.compare(password, userFound.password);
-			if(!validPassword){
-				throw new Error('Invalid login details');
+			const validPassword = await bcrypt.compare(
+				password,
+				userFound.password
+			);
+			if (!validPassword) {
+				return next(appErr('Invalid login details'));
 			}
 			res.json({
 				status: 'success',

@@ -4,12 +4,14 @@ const express = require('express');
 const userRoutes = require('./routes/users/users');
 const postRoutes = require('./routes/posts/posts');
 const commentsRoutes = require('./routes/comments/comments');
+const globalErrorHandler = require('./middlewares/globalHandler');
 require('./config/dbConnect');
 const app = express();
 
 //middlewares
-//------
 app.use(express.json()); // pass incoming request to json
+
+//------
 // User route
 //------
 
@@ -28,7 +30,7 @@ app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/comments', commentsRoutes);
 
 //Error handler middleware
-
+app.use(globalErrorHandler);
 // Listen Server
 const PORT = process.env.PORT || 3003;
 
