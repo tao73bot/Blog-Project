@@ -11,11 +11,8 @@ userRoutes.post('/register', usersController.register);
 //POST/login
 userRoutes.post('/login', usersController.login);
 
-//GET/:id
-userRoutes.get('/:id', usersController.getUserById);
-
-//GET/profile/:id
-userRoutes.get('/profile/:id',protected, usersController.getProfile);
+//GET/profile
+userRoutes.get('/profile',protected, usersController.getProfile);
 
 //PUT/profile-photo-upload/:id
 userRoutes.put('/profile-photo-upload/:id', usersController.updateProfileImage);
@@ -28,5 +25,8 @@ userRoutes.put('/update-password/:id', usersController.updatePassword);
 
 //GET/logout
 userRoutes.get('/logout/:id', usersController.getLogout);
+
+//GET/:id
+userRoutes.get('/:id', usersController.getUserById);
 
 module.exports = userRoutes;

@@ -70,9 +70,13 @@ const usersController = {
 	// get user by id
 	getUserById: async (req, res) => {
 		try {
+			// get user id from params
+			const userId = req.params.id;
+			// find user by id
+			const user = await User.findById(userId);
 			res.json({
 				status: 'success',
-				user: 'User displayed successfully',
+				data: user,
 			});
 		} catch (error) {
 			res.status(400).json({ message: error.message });
@@ -81,9 +85,13 @@ const usersController = {
 	// get profile
 	getProfile: async (req, res) => {
 		try {
+			// get the login user
+			const userID = req.session.userAuth;
+
+			const user = await User.findById(userID);
 			res.json({
 				status: 'success',
-				user: 'User profile displayed successfully',
+				data: user,
 			});
 		} catch (error) {
 			res.status(400).json({ message: error.message });
