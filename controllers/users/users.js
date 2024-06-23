@@ -54,6 +54,11 @@ const usersController = {
 			if (!validPassword) {
 				return next(appErr('Invalid login details'));
 			}
+
+			// save login user
+			req.session.userAuth = userFound._id;
+			console.log(req.session); 
+
 			res.json({
 				status: 'success',
 				data: userFound,

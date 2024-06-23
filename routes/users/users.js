@@ -1,5 +1,6 @@
 const express = require('express');
 const usersController = require('../../controllers/users/users');
+const protected = require('../../middlewares/protected');
 
 const userRoutes = express.Router();
 
@@ -14,7 +15,7 @@ userRoutes.post('/login', usersController.login);
 userRoutes.get('/:id', usersController.getUserById);
 
 //GET/profile/:id
-userRoutes.get('/profile/:id', usersController.getProfile);
+userRoutes.get('/profile/:id',protected, usersController.getProfile);
 
 //PUT/profile-photo-upload/:id
 userRoutes.put('/profile-photo-upload/:id', usersController.updateProfileImage);
