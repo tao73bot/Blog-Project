@@ -20,6 +20,9 @@ userRoutes.put('/profile-photo-upload/:id', usersController.updateProfileImage);
 //PUT/cover-image-upload/:id
 userRoutes.put('/cover-photo-upload/:id', usersController.updateCoverImage);
 
+//PUT/update-user/:id
+userRoutes.put('/update-user/:id', usersController.updateUser);
+
 //PUT/update-password/:id
 userRoutes.put('/update-password/:id', usersController.updatePassword);
 

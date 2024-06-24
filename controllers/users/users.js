@@ -57,7 +57,7 @@ const usersController = {
 
 			// save login user
 			req.session.userAuth = userFound._id;
-			console.log(req.session); 
+			console.log(req.session);
 
 			res.json({
 				status: 'success',
@@ -129,6 +129,33 @@ const usersController = {
 			});
 		} catch (error) {
 			res.status(400).json({ message: error.message });
+		}
+	},
+	// update user
+	updateUser: async (req, res, next) => {
+		const { fullname, email, username, password } = req.body;
+		try {
+			if (email) {
+				const emailTaken = await User.findOne({ email });
+				if (emailTaken) {
+					return next(appErr('Email already taken', 400));
+				}
+			}
+			const user = await User.findByIdAndUpdate(
+				req.params.id,
+				{
+					fullname,
+					email,
+					username,
+				},
+				{ new: true }
+			);
+			res.json({
+				status: 'success',
+				data: user,
+			});
+		} catch (error) {
+			res.json(next(appErr(error.message)));
 		}
 	},
 	// logout
