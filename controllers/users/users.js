@@ -57,7 +57,7 @@ const usersController = {
 
 			// save login user
 			req.session.userAuth = userFound._id;
-			console.log(req.session);
+			// console.log(req.session);
 
 			res.json({
 				status: 'success',
@@ -122,18 +122,34 @@ const usersController = {
 	},
 	// update password
 	updatePassword: async (req, res) => {
+		const { password } = req.body;
 		try {
-			res.json({
-				status: 'success',
-				user: 'User password update successfully',
-			});
+			// check if user is updating the password
+			if (password) {
+				const salt = await bcrypt.genSalt(15);
+				const hashPassword = await bcrypt.hash(password, salt);
+				await User.findByIdAndUpdate(
+					req.params.id,
+					{
+						password: hashPassword,
+					},
+					{
+						new: true,
+					}
+				);
+				res.json({
+					status: 'success',
+					user: 'User password update successfully',
+				});
+			}
+			
 		} catch (error) {
-			res.status(400).json({ message: error.message });
+			res.json(next(appErr('Please provide a password to update')));
 		}
 	},
 	// update user
 	updateUser: async (req, res, next) => {
-		const { fullname, email, username, password } = req.body;
+		const { fullname, email, username } = req.body;
 		try {
 			if (email) {
 				const emailTaken = await User.findOne({ email });
