@@ -99,25 +99,56 @@ const usersController = {
 	},
 
 	// update profile image
-	updateProfileImage: async (req, res) => {
+	updateProfileImage: async (req, res, next) => {
+		console.log(req.file.path);
 		try {
+			// find user by id and update profile image
+			const userId = req.session.userAuth;
+			const userFound = await User.findById(userId);
+			// chcek if user exists
+			if (!userFound) {
+				return next(appErr('User not found'));
+			}
+			// Update user profile image
+			await User.findByIdAndUpdate(
+				userId,
+				{
+					profileImage: req.file.path,
+				},
+				{
+					new: true,
+				}
+			);
 			res.json({
 				status: 'success',
-				user: 'User profile image uploaded successfully',
+				data: 'User profile image uploaded successfully',
 			});
 		} catch (error) {
-			res.status(400).json({ message: error.message });
+			next(appErr(error.message));
 		}
 	},
 	// update cover image
 	updateCoverImage: async (req, res) => {
+		console.log(req.file.path);
 		try {
+			const userId = req.session.userAuth;
+			const userFound = await User.findById(userId);
+			if (!userFound) {
+				return next(appErr('User not found'));
+			}
+			await User.findByIdAndUpdate(
+				userId,
+				{
+					coverImage: req.file.path,
+				},
+				{ new: true }
+			);
 			res.json({
 				status: 'success',
-				user: 'User cover image uploaded successfully',
+				data: 'User cover image uploaded successfully',
 			});
 		} catch (error) {
-			res.status(400).json({ message: error.message });
+			next(appErr(error.message));
 		}
 	},
 	// update password
@@ -142,7 +173,6 @@ const usersController = {
 					user: 'User password update successfully',
 				});
 			}
-			
 		} catch (error) {
 			res.json(next(appErr('Please provide a password to update')));
 		}
