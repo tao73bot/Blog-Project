@@ -4,10 +4,10 @@ const appErr = require('../../utils/appErr');
 
 const postsController = {
 	// create post
-	createPost: async (req, res,next) => {
-		const { title, description, category,user } = req.body;
+	createPost: async (req, res, next) => {
+		const { title, description, category, user } = req.body;
 		try {
-			if (!title || !description || !category) { 
+			if (!title || !description || !category) {
 				return next(appErr('All field are required!'));
 			}
 			// find user
@@ -30,29 +30,34 @@ const postsController = {
 				data: postCreated,
 			});
 		} catch (error) {
-			res.status(400).json({ message: error.message });
+			next(appErr(error.message));
 		}
 	},
 	// get all posts
-	getPosts: async (req, res) => {
+	getPosts: async (req, res,next) => {
 		try {
+			const posts = await Post.find();
 			res.json({
 				status: 'success',
-				post: 'Post fetched successfully',
+				data: posts,
 			});
 		} catch (error) {
-			res.status(400).json({ message: error.message });
+			next(appErr(error.message));
 		}
 	},
 	// get post by id
-	getPostById: async (req, res) => {
+	getPostById: async (req, res, next) => {
 		try {
+			// get post id from params
+			const id = req.params.id;
+			// find post by id
+			const post = await Post.findById(id);
 			res.json({
 				status: 'success',
-				post: 'Post details fetched successfully',
+				data: post,
 			});
 		} catch (error) {
-			res.status(400).json({ message: error.message });
+			next(appErr(error.message));
 		}
 	},
 	// delete post by id
