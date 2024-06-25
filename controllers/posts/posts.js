@@ -61,25 +61,52 @@ const postsController = {
 		}
 	},
 	// delete post by id
-	deletePostById: async (req, res) => {
+	deletePostById: async (req, res,next) => {
 		try {
+			// find post by id
+			const post = await Post.findById(req.params.id);
+			// check if post belongs to user
+			if (post.user.toString() !== req.session.userAuth.toString()) {
+				return next(appErr('You are not authorized to delete this post',403));
+			}
+			// delete post
+			await Post.findByIdAndDelete(req.params.id);
 			res.json({
 				status: 'success',
-				post: 'Post deleted successfully',
+				post: 'Post has been deleted successfully',
 			});
 		} catch (error) {
-			res.status(400).json({ message: error.message });
+			next(appErr(error.message)); 
 		}
 	},
 	// update post by id
-	updatePostById: async (req, res) => {
+	updatePostById: async (req, res,next) => {
+		const { title, description, category } = req.body;
 		try {
+			if (!title && !description && !category) {
+				return next(appErr('At least a field are required!'));
+			}
+			// find post by id
+			const post = await Post.findById(req.params.id);
+			// check if post belongs to user
+			if (post.user.toString() !== req.session.userAuth.toString()) {
+				return next(
+					appErr('You are not authorized to update this post', 403)
+				);
+			}
+			// update post
+			const postUpdated = await Post.findByIdAndUpdate(req.params.id, {
+				title,
+				description,
+				category,
+				image: req.file.path,
+			}, { new: true });
 			res.json({
 				status: 'success',
-				post: 'Post updated successfully',
+				data: postUpdated,
 			});
 		} catch (error) {
-			res.status(400).json({ message: error.message });
+			next(appErr(error.message));
 		}
 	},
 };

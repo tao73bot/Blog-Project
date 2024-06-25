@@ -20,9 +20,9 @@ postRoutes.get('/', postsController.getPosts);
 postRoutes.get('/:id', postsController.getPostById);
 
 //Delete//:id
-postRoutes.delete('/:id', postsController.deletePostById);
+postRoutes.delete('/:id', protected ,postsController.deletePostById);
 
 // Put//:id
-postRoutes.put('/:id', postsController.updatePostById);
+postRoutes.put('/:id',protected, upload.single('file') , postsController.updatePostById);
 
 module.exports = postRoutes;
