@@ -88,7 +88,7 @@ const usersController = {
 			// get the login user
 			const userID = req.session.userAuth;
 
-			const user = await User.findById(userID).populate('posts');
+			const user = await User.findById(userID).populate('posts').populate('comments');
 			res.json({
 				status: 'success',
 				data: user,

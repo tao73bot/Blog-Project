@@ -36,7 +36,7 @@ const postsController = {
 	// get all posts
 	getPosts: async (req, res,next) => {
 		try {
-			const posts = await Post.find();
+			const posts = await Post.find().populate('comments');
 			res.json({
 				status: 'success',
 				data: posts,
@@ -51,7 +51,7 @@ const postsController = {
 			// get post id from params
 			const id = req.params.id;
 			// find post by id
-			const post = await Post.findById(id);
+			const post = await Post.findById(id).populate('comments');
 			res.json({
 				status: 'success',
 				data: post,
